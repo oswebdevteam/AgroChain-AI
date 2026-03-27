@@ -1,0 +1,221 @@
+@import "tailwindcss";
+
+:root {
+  --color-forest: #0d3b1e;
+  --color-mint: #2ecc71;
+  --color-gold: #f0c040;
+  --color-gold-deep: #d4a017;
+  --color-ink: #0a0f0a;
+  --color-cream: #fafaf5;
+  --background: var(--color-forest);
+  --foreground: var(--color-cream);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Avenir Next", "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-forest);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+a,
+button,
+input {
+  transition-property: color, background-color, border-color, transform, box-shadow, opacity;
+  transition-duration: 200ms;
+}
+
+::selection {
+  background: rgba(46, 204, 113, 0.26);
+  color: var(--color-cream);
+}
+
+.font-display {
+  font-family: "Arial Black", "Avenir Next Condensed", "Franklin Gothic Heavy", sans-serif;
+  font-weight: 900;
+}
+
+.hero-shell {
+  position: relative;
+}
+
+.hero-editorial {
+  min-height: 28rem;
+}
+
+.hero-collage-card,
+.hero-collage-icon {
+  will-change: transform;
+  transition: box-shadow 300ms ease, opacity 300ms ease;
+}
+
+.noise-layer {
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.08), transparent 18%),
+    radial-gradient(circle at 80% 0%, rgba(240, 192, 64, 0.08), transparent 22%),
+    radial-gradient(circle at 50% 80%, rgba(46, 204, 113, 0.08), transparent 20%);
+  mix-blend-mode: screen;
+}
+
+.hero-card::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+}
+
+.live-dot {
+  box-shadow: 0 0 0 rgba(46, 204, 113, 0.4);
+  animation: pulse-dot 1.8s infinite;
+}
+
+.lift-card {
+  transition-duration: 300ms;
+}
+
+.lift-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.22);
+}
+
+.marquee-track {
+  animation: marquee 24s linear infinite;
+}
+
+.section-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fade-up 800ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.section-reveal:nth-of-type(2) {
+  animation-delay: 120ms;
+}
+
+.section-reveal:nth-of-type(3) {
+  animation-delay: 180ms;
+}
+
+.section-reveal:nth-of-type(4) {
+  animation-delay: 240ms;
+}
+
+.section-reveal:nth-of-type(5) {
+  animation-delay: 300ms;
+}
+
+.section-reveal:nth-of-type(6) {
+  animation-delay: 360ms;
+}
+
+.section-reveal:nth-of-type(7) {
+  animation-delay: 420ms;
+}
+
+.section-reveal:nth-of-type(8) {
+  animation-delay: 480ms;
+}
+
+.section-reveal:nth-of-type(9) {
+  animation-delay: 540ms;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@supports (animation-timeline: view()) {
+  .section-reveal {
+    animation-name: fade-up;
+    animation-fill-mode: both;
+    animation-timeline: view();
+    animation-range: entry 15% cover 32%;
+  }
+}
+
+@keyframes fade-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes pulse-dot {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .live-dot,
+  .marquee-track,
+  .section-reveal {
+    animation: none;
+  }
+
+  .section-reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .lift-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-editorial {
+    min-height: auto;
+  }
+
+  .marquee-track {
+    animation-duration: 18s;
+  }
+}
