@@ -219,3 +219,46 @@ input {
     animation-duration: 18s;
   }
 }
+
+/* Dashboard Utilities */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sidebar-blur {
+  background: color-mix(in srgb, var(--color-forest) 80%, black);
+  backdrop-filter: blur(12px);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.status-dot {
+  @apply h-2 w-2 rounded-full;
+}
+
+.animate-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
