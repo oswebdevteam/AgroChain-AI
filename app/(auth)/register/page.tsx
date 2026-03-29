@@ -18,8 +18,18 @@ export default function RegisterPage() {
     role: UserRole.BUYER,
   });
 
+  const passwordChecks = {
+    uppercase: /[A-Z]/.test(formData.password),
+    lowercase: /[a-z]/.test(formData.password),
+    number: /[0-9]/.test(formData.password),
+    length: formData.password.length >= 8,
+  };
+
+  const allChecksPassed = Object.values(passwordChecks).every(Boolean);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!allChecksPassed) return;
     setLoading(true);
     try {
       await register(formData);
@@ -88,16 +98,43 @@ export default function RegisterPage() {
           value={formData.phone}
           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
         />
-        <Input
-          label="Password"
-          type="password"
-          placeholder="••••••••"
-          required
-          value={formData.password}
-          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-        />
 
-        <Button type="submit" className="w-full" isLoading={loading}>
+        <div className="space-y-2">
+          <Input
+            label="Password"
+            type="password"
+            placeholder="••••••••"
+            required
+            value={formData.password}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+          />
+          {formData.password.length > 0 && (
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              {[
+                { key: 'uppercase', label: 'Uppercase letter' },
+                { key: 'lowercase', label: 'Lowercase letter' },
+                { key: 'number', label: 'At least one number' },
+                { key: 'length', label: 'Minimum 8 characters' },
+              ].map(({ key, label }) => (
+                <div key={key} className="flex items-center gap-2">
+                  <span className={`text-xs ${passwordChecks[key as keyof typeof passwordChecks] ? 'text-green-400' : 'text-white/30'}`}>
+                    {passwordChecks[key as keyof typeof passwordChecks] ? '✓' : '○'}
+                  </span>
+                  <span className={`text-xs ${passwordChecks[key as keyof typeof passwordChecks] ? 'text-green-400' : 'text-white/30'}`}>
+                    {label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <Button
+          type="submit"
+          className="w-full"
+          isLoading={loading}
+          disabled={formData.password.length > 0 && !allChecksPassed}
+        >
           Create Account
         </Button>
       </form>

@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+});
 
 export const metadata: Metadata = {
   title: "AgroChain AI",
@@ -19,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full scroll-smooth antialiased">
-      <body className={`${inter.className} min-h-full flex flex-col bg-(--color-forest) text-(--color-cream)`}>
+      <body className={`${montserrat.variable} font-sans min-h-full flex flex-col bg-(--color-forest) text-(--color-cream)`}>
         <AuthProvider>
           {children}
           <Toaster

@@ -48,8 +48,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (credentials: any) => {
     try {
       const { data } = await api.post('/auth/login', credentials);
-      setToken(data.accessToken);
-      await refreshUser();
+      setToken(data.data.accessToken);
+      setUser(data.data.user);
       toast.success('Login successful');
       router.push('/dashboard');
     } catch (error: any) {
