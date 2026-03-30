@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     try {
       const { data } = await api.get('/auth/profile');
-      setUser(data);
+      setUser(data.data);
     } catch (error) {
       removeToken();
       setUser(null);

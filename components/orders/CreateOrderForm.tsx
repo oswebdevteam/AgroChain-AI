@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/Card';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
 import { Currency } from '@/types';
+import { FarmerSelect } from './FarmerSelect';
 
 export function CreateOrderForm() {
   const router = useRouter();
@@ -48,12 +49,9 @@ export function CreateOrderForm() {
             value={formData.produceType}
             onChange={(e) => setFormData({ ...formData, produceType: e.target.value })}
           />
-          <Input
-            label="Seller (Farmer) ID"
-            placeholder="UUID of the farmer"
-            required
+          <FarmerSelect
             value={formData.sellerId}
-            onChange={(e) => setFormData({ ...formData, sellerId: e.target.value })}
+            onChange={(id) => setFormData({ ...formData, sellerId: id })}
           />
         </div>
 

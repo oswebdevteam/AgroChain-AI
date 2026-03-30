@@ -23,7 +23,7 @@ export default function IdentityPage() {
     if (!user) return;
     try {
       const { data } = await api.get(`/users/${user.id}/financial-identity`);
-      setIdentity(data);
+      setIdentity(data.data);
     } catch (error: any) {
       if (error.response?.status === 404) {
         // Identity not yet created (needs first trade)

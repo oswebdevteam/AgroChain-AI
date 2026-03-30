@@ -17,7 +17,7 @@ export default function PaymentsHistoryPage() {
       try {
         // We filter for orders that are not PENDING (i.e., payment has been attempted/successful)
         const { data } = await api.get('/orders');
-        const paidOrders = (data.orders || []).filter((o: ProduceOrder) => o.status !== OrderStatus.PENDING && o.status !== OrderStatus.CANCELLED);
+        const paidOrders = (data.data || []).filter((o: ProduceOrder) => o.status !== OrderStatus.PENDING && o.status !== OrderStatus.CANCELLED);
         setOrders(paidOrders);
       } catch (error) {
         console.error('Failed to fetch payments', error);

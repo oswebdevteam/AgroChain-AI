@@ -19,9 +19,9 @@ export default function PaymentVerifyPage({ params }: { params: Promise<{ ref: s
     const verify = async () => {
       try {
         const { data } = await api.get(`/payments/verify/${ref}`);
-        if (data.status === 'SUCCESS' || data.status === 'SUCCESSFUL') {
+        if (data.data?.status === 'SUCCESS' || data.data?.status === 'SUCCESSFUL') {
           setStatus('success');
-          setOrderId(data.orderId);
+          setOrderId(data.data.orderId);
         } else {
           setStatus('failed');
         }

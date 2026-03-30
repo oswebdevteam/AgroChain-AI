@@ -36,7 +36,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
   const fetchOrder = async () => {
     try {
       const { data } = await api.get(`/orders/${id}`);
-      setOrder(data.order);
+      setOrder(data.data);
     } catch (error) {
       console.error('Failed to fetch order', error);
       toast.error('Could not load order details');
@@ -83,8 +83,8 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
     try {
       const { data } = await api.post('/payments/initiate', { orderId: id });
       toast.success('Payment initiated');
-      if (data.redirectUrl) {
-        window.location.href = data.redirectUrl;
+      if (data.data?.redirectUrl) {
+        window.location.href = data.data.redirectUrl;
       } else {
         fetchOrder();
       }

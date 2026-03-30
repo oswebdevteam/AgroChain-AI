@@ -29,7 +29,7 @@ export default function BlockchainProofPage({ params }: { params: Promise<{ orde
     const fetchProof = async () => {
       try {
         const { data } = await api.get(`/blockchain/verify/${orderId}`);
-        setProof(data);
+        setProof(data.data);
       } catch (error) {
         console.error('Failed to fetch blockchain proof', error);
         // Default to showing some "pending" or "simulated" state if not found

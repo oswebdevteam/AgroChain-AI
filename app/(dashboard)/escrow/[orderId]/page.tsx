@@ -23,7 +23,7 @@ export default function EscrowDetailPage({ params }: { params: Promise<{ orderId
   const fetchEscrow = async () => {
     try {
       const { data } = await api.get(`/escrow/${orderId}`);
-      setEscrow(data.escrow);
+      setEscrow(data.data);
     } catch (error) {
       console.error('Failed to fetch escrow', error);
       toast.error('Could not load escrow details');

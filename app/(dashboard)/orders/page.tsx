@@ -22,7 +22,7 @@ export default function OrdersPage() {
     const fetchOrders = async () => {
       try {
         const { data } = await api.get('/orders');
-        setOrders(data.orders || []);
+        setOrders(data.data || []);
       } catch (error) {
         console.error('Failed to fetch orders', error);
       } finally {

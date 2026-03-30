@@ -33,7 +33,7 @@ export default function AnalyticsPage() {
     const fetchAnalytics = async () => {
       try {
         const { data } = await api.get('/analytics/trade-corridors');
-        setData(data);
+        setData(data.data);
       } catch (error) {
         console.error('Failed to fetch analytics', error);
       } finally {
