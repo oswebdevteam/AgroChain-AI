@@ -22,8 +22,8 @@ export default function IdentityPage() {
   const fetchIdentity = async () => {
     if (!user) return;
     try {
-      const data = await getFinancialIdentity(user.id);
-      setIdentity(data.identity);
+      const identity = await getFinancialIdentity(user.id);
+      setIdentity(identity);
     } catch (error: any) {
       if (error.response?.status === 404) {
         // Identity not yet created (needs first trade) or endpoint not available

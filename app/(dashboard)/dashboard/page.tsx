@@ -70,7 +70,7 @@ export default function DashboardPage() {
 
         // --- Financial Identity (Credit Score) ---
         if (identityRes.status === 'fulfilled') {
-          const identity: FinancialIdentity = identityRes.value.identity;
+          const identity: FinancialIdentity = identityRes.value;
           setFinancialIdentity(identity);
           setStats((prev) => ({
             ...prev,
@@ -242,7 +242,7 @@ export default function DashboardPage() {
           )}
           <div className="space-y-3">
             <Button variant="mint" className="w-full" asChild>
-              <Link href="/ai-identity">View Full Identity Report</Link>
+              <Link href="/identity">View Full Identity Report</Link>
             </Button>
             <Button variant="ghost" className="w-full" asChild>
               <Link href="/orders/new">Create New Order</Link>

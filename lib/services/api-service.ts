@@ -32,7 +32,7 @@ import {
   FxRateParams,
   FxRateResponse,
 } from '@/lib/types/api-types';
-import { ProduceOrder, Profile } from '@/types';
+import { ProduceOrder, Profile, FinancialIdentity } from '@/types';
 
 // ============================================================================
 // Authentication Services
@@ -252,9 +252,9 @@ export async function getBlockchainProof(orderId: string): Promise<BlockchainPro
  * @returns Financial identity with credit score, risk indicators, and recommendations
  * @throws Error if unauthorized (can only view own identity unless admin)
  */
-export async function getFinancialIdentity(userId: string): Promise<FinancialIdentityResponse> {
+export async function getFinancialIdentity(userId: string): Promise<FinancialIdentity> {
   const { data } = await api.get(`/users/${userId}/financial-identity`);
-  return data.data;
+  return data.data; // Backend returns { success: true, data: { ...financial identity fields } }
 }
 
 /**
