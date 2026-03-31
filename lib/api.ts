@@ -64,13 +64,23 @@ api.interceptors.response.use(
           logError(errorId, error, '401 Unauthorized');
           
           // Don't redirect if this is an auth or payment endpoint
-          const isAuthEndpoint = originalRequest.url?.includes('/auth/login') || 
-                                 originalRequest.url?.includes('/auth/register');
-          const isPaymentEndpoint = originalRequest.url?.includes('/payments/');
+          const requestUrl = originalRequest.url || '';
+          const isAuthEndpoint = requestUrl.includes('/auth/login') || 
+                                 requestUrl.includes('/auth/register');
+          const isPaymentEndpoint = requestUrl.includes('/payments/') || 
+                                    requestUrl.includes('/payment/');
           
           if (isAuthEndpoint || isPaymentEndpoint) {
             // Let the calling page handle the error
+            if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+              console.log('[Auth] Skipping auto-logout for:', requestUrl);
+            }
             break;
+          }
+          
+          // Log which endpoint triggered the logout
+          if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+            console.log('[Auth] Auto-logout triggered by:', requestUrl);
           }
           
           // Attempt token refresh if not already retried
