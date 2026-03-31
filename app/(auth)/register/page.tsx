@@ -32,7 +32,13 @@ export default function RegisterPage() {
     if (!allChecksPassed) return;
     setLoading(true);
     try {
-      await register(formData);
+      await register({
+        full_name: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+        role: formData.role,
+      });
     } catch (error) {
       // Error handled in AuthContext
     } finally {
