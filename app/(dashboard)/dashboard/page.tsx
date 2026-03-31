@@ -70,7 +70,7 @@ export default function DashboardPage() {
 
         // --- Financial Identity (Credit Score) ---
         if (identityRes.status === 'fulfilled') {
-          const identity: FinancialIdentity = identityRes.value.financial_identity;
+          const identity: FinancialIdentity = identityRes.value.identity;
           setFinancialIdentity(identity);
           setStats((prev) => ({
             ...prev,
