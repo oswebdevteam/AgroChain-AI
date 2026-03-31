@@ -15,6 +15,7 @@ import {
 import api from '@/lib/api';
 import { OrderStatus, type ProduceOrder, type FinancialIdentity } from '@/types';
 import Link from 'next/link';
+import { getFinancialIdentity } from '@/lib/services/api-service';
 
 interface DashboardStats {
   activeTrades: number;
@@ -45,7 +46,7 @@ export default function DashboardPage() {
         const [ordersRes, settlementsRes, identityRes] = await Promise.allSettled([
           api.get('/orders?limit=5'),
           api.get('/analytics/settlement-metrics'),
-          api.get(`/users/${user.id}/financial-identity`),
+          user ? getFinancialIdentity(user.id) : Promise.reject(new Error('No user')),
         ]);
 
         // --- Recent Orders ---
@@ -69,7 +70,7 @@ export default function DashboardPage() {
 
         // --- Financial Identity (Credit Score) ---
         if (identityRes.status === 'fulfilled') {
-          const identity: FinancialIdentity = identityRes.value.data.data;
+          const identity: FinancialIdentity = identityRes.value.financial_identity;
           setFinancialIdentity(identity);
           setStats((prev) => ({
             ...prev,

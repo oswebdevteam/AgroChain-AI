@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import api from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { type FinancialIdentity, UserRole } from '@/types';
 import { Card } from '@/components/ui/Card';
@@ -12,6 +11,7 @@ import { FinancingEligibilityBadge } from '@/components/identity/FinancingEligib
 import { ShieldCheck, AlertTriangle, TrendingUp, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
+import { getFinancialIdentity, analyzeFinancialIdentity } from '@/lib/services/api-service';
 
 export default function IdentityPage() {
   const { user } = useAuth();
@@ -22,12 +22,14 @@ export default function IdentityPage() {
   const fetchIdentity = async () => {
     if (!user) return;
     try {
-      const { data } = await api.get(`/users/${user.id}/financial-identity`);
-      setIdentity(data.data);
+      const data = await getFinancialIdentity(user.id);
+      setIdentity(data.financial_identity);
     } catch (error: any) {
       if (error.response?.status === 404) {
-        // Identity not yet created (needs first trade)
+        // Identity not yet created (needs first trade) or endpoint not available
         setIdentity(null);
+      } else {
+        console.error('Failed to fetch financial identity:', error);
       }
     } finally {
       setLoading(false);
@@ -39,9 +41,10 @@ export default function IdentityPage() {
   }, [user]);
 
   const handleAnalyze = async () => {
+    if (!user) return;
     setAnalyzing(true);
     try {
-      await api.post(`/users/${user?.id}/financial-identity/analyze`);
+      await analyzeFinancialIdentity(user.id);
       toast.success('AI re-analysis complete');
       fetchIdentity();
     } catch (error: any) {

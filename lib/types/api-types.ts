@@ -12,6 +12,9 @@ import {
   TradeCorridor
 } from '@/types';
 
+// Re-export types that are used in service modules
+export type { BlockchainProof, TradeCorridor, Escrow, FinancialIdentity } from '@/types';
+
 // ============================================================================
 // Generic API Response Types
 // ============================================================================

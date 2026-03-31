@@ -79,17 +79,27 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
   };
 
   const handleInitiatePayment = async () => {
+    if (!order) return;
     setActionLoading(true);
     try {
-      const { data } = await api.post('/payments/initiate', { orderId: id });
-      toast.success('Payment initiated');
+      const { data } = await api.post('/payments/initiate', { 
+        orderId: id,
+        amount: order.total_amount,
+        currency: order.currency 
+      });
+      toast.success('Redirecting to payment gateway...');
       if (data.data?.redirectUrl) {
+        // Store order ID for callback
+        sessionStorage.setItem('pendingPaymentOrderId', id);
         window.location.href = data.data.redirectUrl;
       } else {
+        toast.error('Payment gateway URL not received');
         fetchOrder();
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to initiate payment');
+      const errorMessage = error.response?.data?.message || 'Failed to initiate payment';
+      toast.error(errorMessage);
+      console.error('Payment initiation error:', error);
     } finally {
       setActionLoading(false);
     }

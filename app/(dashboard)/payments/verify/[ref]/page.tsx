@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '@/lib/api';
+import { verifyPayment } from '@/lib/services/payment-service';
 import { Card } from '@/components/ui/Card';
 import { Spinner } from '@/components/ui/Spinner';
 import { CheckCircle2, XCircle, ArrowRight, ShieldCheck } from 'lucide-react';
@@ -18,10 +18,10 @@ export default function PaymentVerifyPage({ params }: { params: Promise<{ ref: s
   useEffect(() => {
     const verify = async () => {
       try {
-        const { data } = await api.get(`/payments/verify/${ref}`);
-        if (data.data?.status === 'SUCCESS' || data.data?.status === 'SUCCESSFUL') {
+        const result = await verifyPayment(ref);
+        if (result.status === 'SUCCESS' || result.status === 'SUCCESSFUL') {
           setStatus('success');
-          setOrderId(data.data.orderId);
+          setOrderId(result.orderId || null);
         } else {
           setStatus('failed');
         }

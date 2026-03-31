@@ -2,16 +2,17 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '@/lib/api';
 import { setToken, removeToken, getToken } from '@/lib/auth';
+import { login as loginService, register as registerService, getProfile } from '@/lib/services/auth-service';
 import type { Profile, UserRole } from '@/types';
+import type { LoginCredentials, RegisterData } from '@/lib/types/api-types';
 import toast from 'react-hot-toast';
 
 interface AuthContextType {
   user: Profile | null;
   loading: boolean;
-  login: (credentials: any) => Promise<void>;
-  register: (data: any) => Promise<void>;
+  login: (credentials: LoginCredentials) => Promise<void>;
+  register: (data: RegisterData) => Promise<void>;
   logout: () => void;
   refreshUser: () => Promise<void>;
 }
@@ -31,11 +32,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     try {
-      const { data } = await api.get('/auth/profile');
-      setUser(data.data);
-    } catch (error) {
-      removeToken();
-      setUser(null);
+      const profile = await getProfile();
+      setUser(profile);
+    } catch (error: any) {
+      // Handle 401 errors (token expired/invalid)
+      if (error.response?.status === 401) {
+        removeToken();
+        setUser(null);
+        
+        // Preserve return URL for redirect after login
+        if (typeof window !== 'undefined') {
+          const returnUrl = window.location.pathname + window.location.search;
+          if (returnUrl !== '/login' && returnUrl !== '/register') {
+            sessionStorage.setItem('returnUrl', returnUrl);
+          }
+        }
+      }
     } finally {
       setLoading(false);
     }
@@ -45,26 +57,43 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     refreshUser();
   }, []);
 
-  const login = async (credentials: any) => {
+  const login = async (credentials: LoginCredentials) => {
     try {
-      const { data } = await api.post('/auth/login', credentials);
-      setToken(data.data.accessToken);
-      setUser(data.data.user);
+      const authResponse = await loginService(credentials);
+      setToken(authResponse.accessToken);
+      setUser(authResponse.user);
       toast.success('Login successful');
-      router.push('/dashboard');
+      
+      // Check for return URL
+      const returnUrl = typeof window !== 'undefined' 
+        ? sessionStorage.getItem('returnUrl') 
+        : null;
+      
+      if (returnUrl) {
+        sessionStorage.removeItem('returnUrl');
+        router.push(returnUrl);
+      } else {
+        router.push('/dashboard');
+      }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Login failed');
+      const errorMessage = error.response?.data?.message || 'Login failed';
+      toast.error(errorMessage);
       throw error;
     }
   };
 
-  const register = async (formData: any) => {
+  const register = async (formData: RegisterData) => {
     try {
-      await api.post('/auth/register', formData);
-      toast.success('Registration successful. Please login.');
-      router.push('/login');
+      const authResponse = await registerService(formData);
+      
+      // Auto-login after successful registration
+      setToken(authResponse.accessToken);
+      setUser(authResponse.user);
+      toast.success('Registration successful. Welcome!');
+      router.push('/dashboard');
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Registration failed');
+      const errorMessage = error.response?.data?.message || 'Registration failed';
+      toast.error(errorMessage);
       throw error;
     }
   };
