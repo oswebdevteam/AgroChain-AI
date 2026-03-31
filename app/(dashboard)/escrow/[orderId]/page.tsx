@@ -118,18 +118,25 @@ export default function EscrowDetailPage({ params }: { params: Promise<{ orderId
       </div>
 
       {escrow.blockchain_tx_hash && (
-        <Card variant="outline" className="flex items-center justify-between group cursor-pointer hover:border-white/20">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center">
-              <ExternalLink className="h-5 w-5 text-white/30 group-hover:text-(--color-mint)" />
+        <a 
+          href={`https://basescan.org/tx/${escrow.blockchain_tx_hash}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block"
+        >
+          <Card variant="outline" className="flex items-center justify-between group cursor-pointer hover:border-white/20 transition-all">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center">
+                <ExternalLink className="h-5 w-5 text-white/30 group-hover:text-(--color-mint) transition-colors" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-white">View on Blockchain</p>
+                <p className="text-xs text-white/30">Verify this escrow state on BaseScan</p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm font-bold text-white">View on Blockchain</p>
-              <p className="text-xs text-white/30">Verify this escrow state on BaseScan</p>
-            </div>
-          </div>
-          <ChevronRight className="h-4 w-4 text-white/20" />
-        </Card>
+            <ChevronRight className="h-4 w-4 text-white/20 group-hover:text-white/40 transition-colors" />
+          </Card>
+        </a>
       )}
     </div>
   );
