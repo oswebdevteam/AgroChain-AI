@@ -119,7 +119,7 @@ export default function EscrowDetailPage({ params }: { params: Promise<{ orderId
 
       {escrow.blockchain_tx_hash && (
         <a 
-          href={`https://basescan.org/tx/${escrow.blockchain_tx_hash}`}
+          href={`https://sepolia.basescan.org/tx/${escrow.blockchain_tx_hash}`}
           target="_blank"
           rel="noopener noreferrer"
           className="block"
