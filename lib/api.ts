@@ -78,9 +78,9 @@ api.interceptors.response.use(
             break;
           }
           
-          // Log which endpoint triggered the logout
+          // Log which endpoint triggered the logout with alert for debugging
           if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
-            console.log('[Auth] Auto-logout triggered by:', requestUrl);
+            alert(`[DEBUG] Auto-logout triggered by: ${requestUrl}`);
           }
           
           // Attempt token refresh if not already retried
