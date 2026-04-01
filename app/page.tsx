@@ -128,35 +128,12 @@ function SimpleIcon() {
   );
 }
 
+import { LandingNav } from '@/components/layout/LandingNav';
+
 export default function Home() {
   return (
     <main className="bg-(--color-forest) text-(--color-cream)">
-      <nav className="sticky top-0 z-50 border-b border-white/10 bg-[color:color-mix(in_srgb,var(--color-forest)_88%,black)]/90 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-6 px-6 py-4 lg:px-10">
-          <a href="/" className="font-display text-xl uppercase tracking-[0.16em] text-(--color-mint)">
-            AgroChain AI
-          </a>
-
-          <div className="hidden items-center gap-8 text-sm text-white/72 md:flex">
-            {navItems.map((item) => (
-              <a key={item.label} href={item.href} className="transition hover:text-(--color-cream)">
-                {item.label}
-              </a>
-            ))}
-            <a href="/login" className="transition hover:text-(--color-mint)">
-              Login
-            </a>
-          </div>
-
-          <a
-            href="/dashboard"
-            className="inline-flex items-center gap-2 rounded-full bg-(--color-mint) px-5 py-3 text-sm font-semibold text-(--color-ink) transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(46,204,113,0.28)]"
-          >
-            Launch App
-            <ArrowUpRight />
-          </a>
-        </div>
-      </nav>
+      <LandingNav />
 
       <section className="hero-shell section-reveal relative isolate overflow-hidden">
         <div className="noise-layer pointer-events-none absolute inset-0 opacity-60" />

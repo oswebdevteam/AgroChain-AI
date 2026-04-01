@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { SidebarProvider } from '@/contexts/SidebarContext';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Topbar } from '@/components/layout/Topbar';
 import { Spinner } from '@/components/ui/Spinner';
@@ -32,16 +33,18 @@ export default function DashboardLayout({
   if (!user) return null;
 
   return (
-    <div className="dashboard-grid bg-(--color-forest)">
-      <Sidebar />
-      <div className="flex flex-col h-screen overflow-hidden">
-        <Topbar />
-        <main className="flex-1 overflow-y-auto p-6 lg:p-10 scroll-smooth">
-          <div className="mx-auto max-w-7xl animate-in">
-            {children}
-          </div>
-        </main>
+    <SidebarProvider>
+      <div className="dashboard-grid bg-(--color-forest)">
+        <Sidebar />
+        <div className="flex flex-col h-screen overflow-hidden">
+          <Topbar />
+          <main className="flex-1 overflow-y-auto p-6 lg:p-10 scroll-smooth">
+            <div className="mx-auto max-w-7xl animate-in">
+              {children}
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }
