@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSidebar } from '@/contexts/SidebarContext';
 import { UserRole } from '@/types';
 import { 
   LayoutDashboard, 
@@ -15,12 +16,14 @@ import {
   UserCircle,
   LogOut,
   PlusCircle,
-  Database
+  Database,
+  X
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function Sidebar() {
   const { user, logout } = useAuth();
+  const { isOpen, close } = useSidebar();
   const pathname = usePathname();
 
   const navLinks = [
@@ -41,12 +44,19 @@ export function Sidebar() {
 
   const isActive = (href: string) => pathname === href;
 
-  return (
-    <aside className="sidebar-blur hidden flex-col border-r border-white/10 lg:flex h-full">
-      <div className="p-8">
+  const sidebarContent = (
+    <aside className="sidebar-blur flex flex-col border-r border-white/10 h-full w-72">
+      <div className="flex items-center justify-between p-8">
         <Link href="/" className="font-display text-xl uppercase tracking-[0.2em] text-(--color-mint)">
           AgroChain AI
         </Link>
+        {/* Close button only visible on mobile */}
+        <button
+          onClick={close}
+          className="lg:hidden rounded-xl border border-white/10 bg-white/5 p-1.5 text-white hover:bg-white/10 transition-all"
+        >
+          <X className="h-4 w-4" />
+        </button>
       </div>
 
       <nav className="flex-1 space-y-2 px-4">
@@ -57,6 +67,7 @@ export function Sidebar() {
           <Link
             key={link.href}
             href={link.href}
+            onClick={close}
             className={cn(
               'group flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all duration-200',
               isActive(link.href)
@@ -78,6 +89,7 @@ export function Sidebar() {
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={close}
                 className={cn(
                   'group flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all duration-200',
                   isActive(link.href)
@@ -96,6 +108,7 @@ export function Sidebar() {
       <div className="border-t border-white/10 p-4 space-y-2">
         <Link
           href="/profile"
+          onClick={close}
           className={cn(
             'flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all',
             isActive('/profile') ? 'bg-white/10 text-white' : 'text-white/50 hover:bg-white/5'
@@ -113,5 +126,29 @@ export function Sidebar() {
         </button>
       </div>
     </aside>
+  );
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <div className="hidden lg:flex h-full">
+        {sidebarContent}
+      </div>
+
+      {/* Mobile sidebar overlay */}
+      {isOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={close}
+          />
+          {/* Drawer */}
+          <div className="absolute left-0 top-0 h-full bg-(--color-forest) shadow-2xl">
+            {sidebarContent}
+          </div>
+        </div>
+      )}
+    </>
   );
 }

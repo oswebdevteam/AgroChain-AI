@@ -2,17 +2,22 @@
 
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSidebar } from '@/contexts/SidebarContext';
 import { Bell, Search, Menu } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 
 export function Topbar() {
   const { user } = useAuth();
+  const { toggle } = useSidebar();
 
   return (
     <header className="h-20 border-b border-white/10 bg-(--color-forest)/40 px-6 backdrop-blur lg:px-10">
       <div className="flex h-full items-center justify-between">
         <div className="flex items-center gap-4 lg:hidden">
-          <button className="rounded-xl border border-white/10 bg-white/5 p-2 text-white">
+          <button
+            onClick={toggle}
+            className="rounded-xl border border-white/10 bg-white/5 p-2 text-white hover:bg-white/10 transition-all"
+          >
             <Menu className="h-5 w-5" />
           </button>
           <span className="font-display text-sm uppercase tracking-widest text-(--color-mint)">
